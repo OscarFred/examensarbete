@@ -1,10 +1,28 @@
 const express = require('express');
-const path = require('path');
+
+// const {
+//   createData,
+//   readData,
+//   updateData,
+//   deleteData,
+// } = require('../controllers/user_controller');
+
+const {
+  createTodoList,
+  readTodoList,
+  createTodoItem,
+  updateTodoItem,
+} = require('../controllers/todolist_controller');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
-});
-
+// .post('/', createData)
+// .get('/', readData)
+// .put('/:id', updateData)
+// .delete('/:id', deleteData)
+router
+  .post('/createTodoList', createTodoList)
+  .get('/readTodoLists', readTodoList)
+  .post('/createTodoItem/:id', createTodoItem)
+  .post('/updateTodoItem/:id', updateTodoItem);
 module.exports = router;
