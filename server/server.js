@@ -17,7 +17,14 @@ const port = process.env.PORT || 9000;
 const app = express();
 
 // Configure middlewares
-app.use(cors());
+// app.use(cors());
+var corsOption = {
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+   };
+app.use(cors(corsOption));
+
 app.use(express.json());
 app.use(cookieSession({
     name: 'session',
@@ -42,27 +49,9 @@ const isLoggedIn = (req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => res.send('Example home page!'))
-app.get('/failed', (req, res) => res.send('Login failed'))
-app.get('/success', isLoggedIn, (req, res) => {
-    res.send(`Welcome mr ${req.body.id}`)
-})
-app.get('/google',
-passport.authenticate('google', {
-    scope: ['profile']
-}));
-
-app.get('/google/callback',
-passport.authenticate('google', {
-    failureRedirect: '/failed'
-}),
-function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/success');
-});
-
 // Defining route middleware
-app.use('/api', require('./routes/api'));
+app.use('/auth', require('./routes/auth'));
+app.use('/api', isLoggedIn, require('./routes/api'));
 
 // Listening to port
 app.listen(port);

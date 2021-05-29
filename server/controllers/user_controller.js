@@ -1,22 +1,38 @@
 // 'use strict';
 
+// const passport = require('passport');
 // const User = require('../models/user_schema');
 
-// const createData = (req, res) => {
-//   User.create(req.body)
-//     .then((data) => {
-//       console.log('New User Created!', data);
-//       res.status(201).json(data);
-//     })
-//     .catch((err) => {
-//       if (err.name === 'ValidationError') {
-//         console.error('Error Validating!', err);
-//         res.status(422).json(err);
-//       } else {
-//         console.error(err);
-//         res.status(500).json(err);
-//       }
-//     });
+// const google = () => {passport.authenticate("google", {
+//     scope: ['profile'],
+//     prompt : "select_account" // Added here
+// })
+// }
+
+// const check = (req, res) => {
+//     console.log("user - " + req.user);
+//     console.log(req.session.passport);
+//     if (req.user === undefined) {
+//         res.json({});
+//     } else {
+//         res.json({
+//         user: req.user
+//         });
+//     }
+// }
+
+// const logOut = function(req, res, next) {
+//     req.logout();
+//     res.json({ msg: "Logged out" });
+//   }
+
+// const callback = () => {
+//     passport.authenticate('google', {
+//         failureRedirect: '/failed'
+//     }),
+//     function (req, res) {
+//         res.redirect('http://localhost:3002');
+//     }
 // };
 
 // const readData = (req, res) => {
@@ -69,8 +85,8 @@
 // };
 
 // module.exports = {
-//   createData,
-//   readData,
-//   updateData,
-//   deleteData,
+//     google,
+//     check,
+//     logOut,
+//     callback
 // };

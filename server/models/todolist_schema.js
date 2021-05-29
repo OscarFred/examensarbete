@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, mongo } = require('mongoose');
 
 const TodoItemSchema = new Schema(
   {
@@ -19,6 +19,9 @@ const TodoListSchema = new Schema(
     title: {
       type: String,
       required: [true, 'title field is required'],
+    },
+    ownerId: {
+      type: String
     },
     todoItems: {
       type: [TodoItemSchema]

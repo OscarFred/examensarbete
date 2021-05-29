@@ -3,6 +3,7 @@ var ObjectID = require('mongodb').ObjectID
 const TodoList = require('../models/todolist_schema');
 
 const createTodoList = (req, res) => {
+  console.log("Testing" + req.body.owner)
   TodoList.create(req.body)
     .then((data) => {
       console.log('New TodoList Created!', data);
@@ -54,7 +55,7 @@ const updateTodoItem = (req, res) => {
 }
 
 const readTodoList = (req, res) => {
-  TodoList.find()
+  TodoList.find({ownerId: req.user._id}).sort({createdAt: -1})
     .then((data) => {
       res.status(200).json(data);
     })

@@ -1,21 +1,22 @@
 const express = require('express');
+const passport = require('passport');
 
-// const {
-//   createData,
-//   readData,
-//   updateData,
-//   deleteData,
-// } = require('../controllers/user_controller');
+const {
+  google,
+  readData,
+  updateData,
+  // deleteData,
+} = require('../controllers/user_controller');
 
 const {
   createTodoList,
   readTodoList,
   createTodoItem,
   updateTodoItem,
+
 } = require('../controllers/todolist_controller');
 
 const router = express.Router();
-
 // .post('/', createData)
 // .get('/', readData)
 // .put('/:id', updateData)

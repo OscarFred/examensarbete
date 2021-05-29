@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <TodoList />
+    <TodoList :user="user" />
   </div>
 </template>
 
@@ -14,6 +14,9 @@ export default {
   name: "Lists",
   components: {
     TodoList
+  },
+  props: {
+    user: {}
   }
 };
 </script>

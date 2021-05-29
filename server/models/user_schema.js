@@ -2,12 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema(
   {
-    name: {
+    displayName: {
       type: String,
       required: [true, 'name field is required'],
     },
     googleId: {
-      type: Number,
+      type: String,
       required: [true, 'Id field is required'],
     },
     picture: {
