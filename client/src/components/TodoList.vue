@@ -19,7 +19,7 @@
         
         <v-card width="100%" elevation="4" justify="center" color="lighten-4" >
           <v-progress-linear
-          value="20"
+          :value="percentageCalculator(list.todoItems)"
         buffer-value="100"
         absolute
         top
@@ -162,6 +162,18 @@ export default {
     editITem: function(id) {
       this.edit[id] = true
       this.getLists()
+    },
+    percentageCalculator: function(list) {
+      let completed = []
+      console.log(list)
+      console.log(list.length)
+      list.forEach(element => {
+        if (element.checked) {
+          completed.push(element.checked)
+        }
+      });
+      console.log(completed.length/list.length*100)
+      return completed.length/list.length*100
     }
   },
 };
