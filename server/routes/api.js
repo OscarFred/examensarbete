@@ -10,6 +10,8 @@ const {
 
 const {
   createTodoList,
+  updateTodoList,
+  readFavorites,
   readTodoList,
   createTodoItem,
   updateTodoItem,
@@ -23,7 +25,9 @@ const router = express.Router();
 // .delete('/:id', deleteData)
 router
   .post('/createTodoList', createTodoList)
-  .get('/readTodoLists', readTodoList)
+  .put('/updateTodoList/:id', updateTodoList)
+  .get('/readTodoLists/:id', readTodoList)
+  .get('/readFavorites', readFavorites)
   .post('/createTodoItem/:id', createTodoItem)
   .post('/updateTodoItem/:id', updateTodoItem);
 module.exports = router;

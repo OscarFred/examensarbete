@@ -1,124 +1,88 @@
 <template>
   <v-theme-provider root>
     <v-app id="inspire">
-      <v-app-bar
-        app
-        flat
-      >
-        <v-avatar v-if="typeof user === undefined"
-          size="32"
-        ></v-avatar>
-        <v-tabs
-          centered
-          class="ml-n9"
-        >
-          <v-tab 
-            v-for="link in links"
-            :key="link" :to="link"
-          >
-          {{link}}
+      <v-app-bar app flat>
+        <v-avatar v-if="typeof user === undefined" size="32"></v-avatar>
+        <v-tabs centered class="ml-n9">
+          <v-tab v-for="link in links" :key="link" :to="`/${link}`">
+            {{ link }}
           </v-tab>
-          
         </v-tabs>
-        
+
         <v-btn v-if="user" icon @click="logOut()">
           <v-icon>mdi-logout</v-icon>
         </v-btn>
         <v-btn v-else title="Log in" icon @click="logIn()">
           <v-icon>mdi-login</v-icon>
         </v-btn>
-        <v-avatar 
+        <v-avatar
           v-if="user"
           src="user.picture"
           class="hidden-sm-and-down"
           size="32"
         >
-          <img :src="user.picture">
+          <img :src="user.picture" />
         </v-avatar>
       </v-app-bar>
+      <router-view :user="user" />
 
-      <v-main>
-        <v-container>
+      <!-- <v-main>
+        <v-container fluid>
           <v-row>
-            <v-col
-              cols="12"
-              sm="2"
-            >
-              <v-sheet
-                rounded="lg"
-                min-height="268"
-              >
-                <!--  -->
+            <v-col cols="12" md="3" order="1" order-md="1">
+              <v-sheet rounded="lg" min-height="268">
+                <router-view name="sidebar1"></router-view>
               </v-sheet>
             </v-col>
 
-            <v-col
-              cols="12"
-              sm="8"
-            >
-              <v-sheet
-                min-height="70vh"
-                rounded="lg"
-              >
-              <router-view :user="user" />
-                <!--  -->
+            <v-col cols="12" md="6" order="3" order-md="2">
+              <v-sheet min-height="70vh" rounded="lg">
+                <router-view :user="user" />
               </v-sheet>
             </v-col>
 
-            <v-col
-              cols="12"
-              sm="2"
-            >
-              <v-sheet
-                rounded="lg"
-                min-height="268"
-              >
-                <!--  -->
+            <v-col cols="12" md="3" order="2" order-md="3">
+              <v-sheet rounded="lg" min-height="268">
+                <router-view name="sidebar2"></router-view>
               </v-sheet>
             </v-col>
           </v-row>
         </v-container>
-      </v-main>
+      </v-main> -->
     </v-app>
   </v-theme-provider>
-
 </template>
 
 <script>
-  import axios from "axios";
-  export default {
-    data: () => ({
-      user: undefined,
-      links: [
-        'Home',
-        'About',
-        'Profile',
-        'Updates',
-      ],
-    }),
-    mounted() {
-      this.checkIfLoggedIn()
+import axios from "axios";
+export default {
+  data: () => ({
+    user: undefined,
+    links: ["Home", "Teams"]
+  }),
+  mounted() {
+    this.checkIfLoggedIn();
+  },
+  methods: {
+    logIn: function() {
+      window.location.href = "http://localhost:9000/auth/google";
     },
-    methods: {
-      logIn: function() {
-        window.location.href = "http://localhost:9000/auth/google";
-      },
-      logOut: function() {
-        window.location.href = "http://localhost:9000/auth/logout";
-      },
-      checkIfLoggedIn() {
-        axios
-        .get('http://localhost:9000/auth/check', {
+    logOut: function() {
+      window.location.href = "http://localhost:9000/auth/logout";
+    },
+    checkIfLoggedIn() {
+      axios
+        .get("http://localhost:9000/auth/check", {
           headers: { "Content-Type": "application/json" },
           withCredentials: true
         })
         .then(response => {
-          this.user = response.data.user
+          this.user = response.data.user;
           console.log(response.data.user);
         });
-      }
     }
   }
+};
 </script>
 
 <style scoped>
@@ -126,5 +90,4 @@
   text-decoration: inherit;
   color: inherit;
 }
-
 </style>

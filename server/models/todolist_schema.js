@@ -23,6 +23,10 @@ const TodoListSchema = new Schema(
     ownerId: {
       type: String
     },
+    favorited: {
+      type: Boolean,
+      default: false
+    },
     todoItems: {
       type: [TodoItemSchema]
     }

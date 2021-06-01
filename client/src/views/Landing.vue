@@ -9,7 +9,6 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import SignIn from "@/components/SignIn.vue";
 
-
 export default {
   name: "Lists",
   components: {

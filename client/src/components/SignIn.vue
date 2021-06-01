@@ -1,7 +1,5 @@
 <template>
-  <div>
-  
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -11,9 +9,7 @@ export default {
       window.location.href = "http://localhost:9000/auth/google";
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

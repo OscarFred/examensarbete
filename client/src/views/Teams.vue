@@ -30,13 +30,13 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TodoList from "@/components/TodoList.vue";
-import SidebarFavorites from "@/components/SidebarFavorites.vue";
+import SidebarTeams from "@/components/SidebarTeams.vue";
 
 export default {
   name: "Lists",
   components: {
     TodoList,
-    SidebarFavorites
+    SidebarTeams
   },
   props: {
     user: {}

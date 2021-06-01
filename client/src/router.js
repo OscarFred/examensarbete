@@ -17,12 +17,17 @@ export default new Router({
     {
       path: "/home",
       name: "home",
-      component: Home,
+      component: Home
     },
     {
       path: "/about",
       name: "about",
       component: () => import("./views/About.vue")
+    },
+    {
+      path: "/Lista/:id",
+      name: "lista",
+      component: () => import("./views/SingularList.vue")
     }
   ]
 });
