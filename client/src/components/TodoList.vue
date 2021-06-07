@@ -1,20 +1,45 @@
 <template>
   <v-container>
-    <v-row justify="center">
+    <v-row
+      justify="center"
+      v-if="$route.name === 'lists' || $route.name === 'team'"
+    >
       <v-col cols="11">
-        <v-text-field label="Ny lista" v-model="listTitle">
-          <v-btn slot="append" @click="createTodoList()" color="" plain icon>
+        <v-text-field
+          label="New list"
+          v-model="listTitle"
+          @keyup.enter="createTodoList()"
+          required
+          :rules="newRules"
+        >
+          <v-btn
+            slot="append"
+            @click="createTodoList()"
+            color="primary"
+            plain
+            icon
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-text-field>
       </v-col>
     </v-row>
-    <v-row justify="center" v-if="$route.name === 'home'">
+    <v-row
+      justify="center"
+      v-if="$route.name === 'lists' || $route.name === 'team'"
+    >
       <v-col cols="6">
-        <h3 class="text-h3 mb-2 text-center">Listor</h3>
+        <h3 class="text-h3 mb-2 text-center">Lists</h3>
       </v-col>
     </v-row>
-    <v-row dense>
+    <Confirm
+      :dialog="dialog"
+      :itemName="itemName"
+      :itemId="itemId"
+      @closeDialog="closeDialog"
+      @deleteItem="deleteItem"
+    />
+    <v-row dense :class="$route.name === 'list' ? 'mt-5' : ''">
       <v-col cols="12" v-for="list in todoLists" :key="list._id">
         <v-card width="100%" elevation="4" justify="center" color="lighten-4">
           <v-progress-linear
@@ -22,10 +47,11 @@
             buffer-value="100"
             absolute
             top
-            color="success"
+            color="primary"
           ></v-progress-linear>
           <v-card-title>
             <v-text-field
+              :ref="`edit-${list._id}`"
               v-if="listEditComputed[list._id]"
               v-model="list.title"
             >
@@ -35,11 +61,21 @@
                 class="dots"
                 icon
                 plain
+                color="primary"
               >
                 <v-icon>mdi-check</v-icon>
               </v-btn>
             </v-text-field>
-            <h4 v-else class="text-h4 mb-2">{{ list.title }}</h4>
+            <h4 v-else-if="$route.name !== 'lists'" class="text-h4 mb-2">
+              {{ list.title }}
+            </h4>
+            <router-link
+              class="primary--text text-decoration-none"
+              v-else
+              :to="`/List/${list._id}`"
+            >
+              <h4 class="text-h4 mb-2">{{ list.title }}</h4>
+            </router-link>
             <v-spacer></v-spacer>
 
             <v-btn
@@ -58,14 +94,26 @@
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
 
-            <v-btn icon>
+            <v-btn
+              color="danger"
+              icon
+              @click.stop="openDialog(list._id, list.title, (dialog = true))"
+            >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
+            <!-- <v-btn icon @click="deleteTodoList(list._id)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn> -->
           </v-card-title>
 
           <v-card-subtitle>
-            <v-text-field label="Ny todo" v-model="text">
-              <v-icon slot="append" @click="addToList(list._id)"
+            <v-text-field
+              label="New item"
+              v-model="text[list._id]"
+              :ref="list._id"
+              @keyup.enter="addToList(list._id)"
+            >
+              <v-icon color="primary" slot="append" @click="addToList(list._id)"
                 >mdi-plus</v-icon
               >
             </v-text-field>
@@ -112,7 +160,7 @@
                           width="100%"
                           plain
                           :color="item.color"
-                          @click="removeItem(todoItem._id)"
+                          @click="deleteTodoItem(list._id, todoItem._id)"
                           >{{ item.title }}</v-btn
                         >
                         <v-btn
@@ -129,8 +177,18 @@
                   </v-menu>
                 </v-checkbox>
                 <v-text-field
-                  v-if="editComputed[todoItem._id]"
+                  :key="updateEditItem"
+                  :ref="todoItem._id"
+                  v-show="editComputed[todoItem._id]"
                   v-model="todoItem.text"
+                  @keyup.enter="
+                    updateItem(
+                      list._id,
+                      todoItem.text,
+                      todoItem._id,
+                      todoItem.checked
+                    )
+                  "
                 >
                   <v-btn
                     @click="
@@ -147,6 +205,7 @@
                     class="dots"
                     icon
                     plain
+                    color="primary"
                   >
                     <v-icon>mdi-check</v-icon>
                   </v-btn>
@@ -161,26 +220,62 @@
 </template>
 
 <script>
+import Confirm from "@/components/Confirm.vue";
 import axios from "axios";
 import canvasConfetti from "canvas-confetti";
 export default {
   name: "TodoList",
+  components: {
+    Confirm
+  },
   data: () => ({
     todoLists: [],
-    text: undefined,
-    listTitle: undefined,
+    text: {},
+    listTitle: "",
     popover: [
-      { title: "Remove", color: "red" },
-      { title: "Edit", color: "inherit" }
+      {
+        title: "Edit",
+        color: "inherit"
+      },
+      {
+        title: "Remove",
+        color: "red"
+      }
     ],
     edit: {},
+    updateEditItem: 0,
+    updateEditListId: "",
     listEdit: {},
     percentage: {},
-    enableConfetti: true
+    enableConfetti: true,
+    newlyCreatedId: "",
+    dialog: false,
+    itemName: "",
+    itemId: "",
+    newRules: [],
+    ownerId: "0",
+    listId: "0"
   }),
   created() {
-    this.getLists();
+    // this.getLists();
     this.confettiEnabled = false;
+  },
+  mounted() {
+    this.getLists();
+  },
+  updated() {
+    if (this.newlyCreatedId !== "") {
+      if (this.$refs[this.newlyCreatedId]) {
+        this.$refs[this.newlyCreatedId][0].focus();
+        this.newlyCreatedId = "";
+      }
+    }
+    if (this.updateEditListId !== "") {
+      if (this.$refs[this.updateEditListId]) {
+        this.$refs[`edit-${this.updateEditListId}`][0].focus();
+        this.updateEditListId = "";
+      }
+    }
   },
   computed: {
     editComputed: function() {
@@ -188,44 +283,89 @@ export default {
     },
     listEditComputed: function() {
       return this.listEdit;
+    },
+    userComputed: function() {
+      return this.user;
     }
   },
   props: {
     user: {}
   },
+  watch: {
+    $route(to, from) {
+      if (to !== from) {
+        this.getLists();
+      }
+    },
+    updateEditItem: function(val) {
+      this.$nextTick(() => {
+        this.$refs[val][0].focus();
+      });
+    }
+  },
   methods: {
-    forceRerender() {
+    openDialog: function(itemId, itemName) {
+      this.itemName = itemName;
+      this.itemId = itemId;
+      this.dialog = true;
+    },
+    closeDialog: function() {
+      this.dialog = false;
+    },
+    forceRerender: function() {
       this.$emit("reloadChild", this.reload);
     },
     getLists: function() {
-      let id = "0";
+      this.listId = "0";
       if (this.$route.params.id) {
-        id = this.$route.params.id;
+        this.listId = this.$route.params.id;
+      }
+      if (this.$route.name === "team") {
+        this.ownerId = this.$route.params.ownerId;
+      } else {
+        this.ownerId = this.user._id;
       }
       axios
-        .get(`http://localhost:9000/api/readTodoLists/${id}`, {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true
-        })
+        .get(
+          `http://localhost:9000/api/readTodoLists/${this.listId}/${this.ownerId}`,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            withCredentials: true
+          }
+        )
         .then(result => {
           this.todoLists = result.data;
         });
     },
-    createTodoList: function() {
-      if (typeof this.listTitle !== "undefined") {
-        fetch("http://localhost:9000/api/createTodoList/", {
-          credentials: "include",
-          body: JSON.stringify({
-            title: this.listTitle,
-            ownerId: this.user._id
-          }),
-          headers: {
-            "Content-Type": "application/json"
-          },
-          method: "POST"
-        }).then(() => {
-          this.getLists();
-        });
+    createTodoList: async function() {
+      if (this.$route.name === "team") {
+        this.ownerId = this.$route.params.ownerId;
+      } else {
+        this.ownerId = this.$store.state.user._id;
+      }
+      if (this.listTitle !== "") {
+        const response = await fetch(
+          "http://localhost:9000/api/createTodoList/",
+          {
+            credentials: "include",
+            body: JSON.stringify({
+              title: this.listTitle,
+              ownerId: this.ownerId
+            }),
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST"
+          }
+        );
+        const data = await response.json();
+        await this.getLists();
+        this.newRules = [];
+        this.newlyCreatedId = data._id;
+      } else {
+        this.newRules = [v => !!v || "Title is required"];
       }
     },
     updateTodoList: function(listId, title, favorited) {
@@ -249,7 +389,7 @@ export default {
       fetch("http://localhost:9000/api/createTodoItem/" + listId, {
         credentials: "include",
         body: JSON.stringify({
-          text: this.text,
+          text: this.text[listId],
           checked: false
         }),
         headers: {
@@ -278,14 +418,39 @@ export default {
         this.checkConfetti(listId);
       });
     },
-    removeItem: function(id) {
-      console.log(`Remove ${id}`);
+    deleteItem: function(listId) {
+      fetch("http://localhost:9000/api/deleteTodoList/" + listId, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST"
+      }).then(() => {
+        this.dialog = false;
+        if (this.$route.params) this.forceRerender();
+        this.getLists();
+      });
+    },
+    deleteTodoItem: function(listId, todoItemId) {
+      fetch("http://localhost:9000/api/deleteTodoItem/" + todoItemId, {
+        credentials: "include",
+        body: JSON.stringify({
+          listId: listId
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST"
+      }).then(() => {
+        this.getLists();
+      });
     },
     editITem: function(id) {
+      this.updateEditItem = id;
       this.edit[id] = true;
-      this.getLists();
     },
     editList: function(id) {
+      this.updateEditListId = id;
       this.listEdit[id] = true;
       this.getLists();
     },
@@ -327,7 +492,6 @@ export default {
         }
 
         var particleCount = 50 * (timeLeft / duration);
-        // since particles fall down, start a bit higher than random
         canvasConfetti(
           Object.assign({}, defaults, {
             particleCount,

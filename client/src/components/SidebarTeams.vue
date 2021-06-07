@@ -1,13 +1,15 @@
 <template>
   <div class="sidebar-favorites">
-    <div class="text-center text-h4 pt-5">Favorites</div>
-    <v-list v-for="favorite in favorites" :key="favorite.id">
+    <div class="text-center text-h4 pt-5">Teams</div>
+    <v-list v-for="team in teams" :key="team.id">
       <template>
-        <v-list-item :to="`/List/${favorite._id}`" :key="favorite.id">
-          <v-list-item-icon><v-icon>mdi-star</v-icon></v-list-item-icon>
+        <v-list-item :to="`/team/${team._id}`" :key="team.id">
+          <v-list-item-icon
+            ><v-icon>mdi-account-group</v-icon></v-list-item-icon
+          >
           <v-list-item-content>
             <router-link to="/Lista/"></router-link>
-            <v-list-item-title v-html="favorite.title"></v-list-item-title>
+            <v-list-item-title v-html="team.teamName"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </template>
@@ -26,33 +28,27 @@ export default {
     reload: undefined
   },
   data: () => ({
-    favorites: [],
-    ownerId: ""
+    teams: []
   }),
   watch: {
     reload: function() {
-      this.getFavorites();
+      this.getTeams();
     }
   },
   created() {
-    this.getFavorites();
+    this.getTeams();
   },
   methods: {
-    getFavorites: function() {
-      if (this.$route.params.ownerId) {
-        this.ownerId = this.$route.params.ownerId;
-      } else {
-        this.ownerId = this.$store.state.user._id
-      }
+    getTeams: function() {
       axios
-        .get(`http://localhost:9000/api/readFavorites/${this.ownerId}`, {
+        .get("http://localhost:9000/api/readTeams", {
           headers: {
             "Content-Type": "application/json"
           },
           withCredentials: true
         })
         .then(result => {
-          this.favorites = result.data;
+          this.teams = result.data;
         });
     }
   }

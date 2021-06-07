@@ -4,8 +4,14 @@
       <v-app-bar app flat>
         <v-avatar v-if="typeof user === undefined" size="32"></v-avatar>
         <v-tabs centered class="ml-n9">
-          <v-tab v-for="link in links" :key="link" :to="`/${link}`">
-            {{ link }}
+          <v-tab to="/">
+            Home
+          </v-tab>
+          <v-tab to="/lists" v-if="user">
+            Lists
+          </v-tab>
+          <v-tab to="/teams" v-if="user">
+            Teams
           </v-tab>
         </v-tabs>
 
@@ -24,31 +30,7 @@
           <img :src="user.picture" />
         </v-avatar>
       </v-app-bar>
-      <router-view :user="user" />
-
-      <!-- <v-main>
-        <v-container fluid>
-          <v-row>
-            <v-col cols="12" md="3" order="1" order-md="1">
-              <v-sheet rounded="lg" min-height="268">
-                <router-view name="sidebar1"></router-view>
-              </v-sheet>
-            </v-col>
-
-            <v-col cols="12" md="6" order="3" order-md="2">
-              <v-sheet min-height="70vh" rounded="lg">
-                <router-view :user="user" />
-              </v-sheet>
-            </v-col>
-
-            <v-col cols="12" md="3" order="2" order-md="3">
-              <v-sheet rounded="lg" min-height="268">
-                <router-view name="sidebar2"></router-view>
-              </v-sheet>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-main> -->
+      <router-view :user="user" v-if="user"></router-view>
     </v-app>
   </v-theme-provider>
 </template>
@@ -58,12 +40,19 @@ import axios from "axios";
 export default {
   data: () => ({
     user: undefined,
-    links: ["Home", "Teams"]
+    links: ["Home", "Lists", "Teams"],
+    reload: null
   }),
-  mounted() {
+  async created() {
     this.checkIfLoggedIn();
   },
+  mounted() {
+    // this.checkIfLoggedIn();
+  },
   methods: {
+    updateReload: function() {
+      this.reload += 1;
+    },
     logIn: function() {
       window.location.href = "http://localhost:9000/auth/google";
     },
@@ -77,8 +66,8 @@ export default {
           withCredentials: true
         })
         .then(response => {
+          this.$store.commit("saveUser", response.data.user)
           this.user = response.data.user;
-          console.log(response.data.user);
         });
     }
   }

@@ -5,12 +5,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // lists: {}
+    user: {}
   },
   mutations: {
-    // newList (state, title, list) {
-    //   state.lists.push(list)
-    // }
+    saveUser(state, user) {
+      state.user = user;
+    }
   },
   actions: {},
   modules: {}

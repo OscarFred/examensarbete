@@ -2,20 +2,30 @@ const express = require('express');
 const passport = require('passport');
 
 const {
-  google,
-  readData,
-  updateData,
-  // deleteData,
+  readUsers,
 } = require('../controllers/user_controller');
+
+
+const {
+  readTeams,
+  createTeam,
+  inviteToTeam,
+  readInvites,
+  acceptInvite,
+  rejectInvite,
+  leaveTeam,
+  deleteTeam
+} = require('../controllers/team_controller');
 
 const {
   createTodoList,
+  createTodoItem,
   updateTodoList,
+  updateTodoItem,
   readFavorites,
   readTodoList,
-  createTodoItem,
-  updateTodoItem,
-
+  deleteTodoList,
+  deleteTodoItem
 } = require('../controllers/todolist_controller');
 
 const router = express.Router();
@@ -26,8 +36,20 @@ const router = express.Router();
 router
   .post('/createTodoList', createTodoList)
   .put('/updateTodoList/:id', updateTodoList)
-  .get('/readTodoLists/:id', readTodoList)
-  .get('/readFavorites', readFavorites)
+  .post('/updateTodoItem/:id', updateTodoItem)
+  .get('/readTodoLists/:id/:ownerId', readTodoList)
+  .get('/readFavorites/:ownerId', readFavorites)
   .post('/createTodoItem/:id', createTodoItem)
-  .post('/updateTodoItem/:id', updateTodoItem);
+  .post('/deleteTodoList/:id', deleteTodoList)
+  .post('/deleteTodoItem/:id', deleteTodoItem)
+  .post('/createTeam/', createTeam)
+  .get('/readTeams/', readTeams)
+  .get('/readUsers', readUsers)
+  .post('/inviteToTeam/:id', inviteToTeam)
+  .get('/readInvites/', readInvites)
+  .get('/acceptInvite/:id', acceptInvite)
+  .get('/rejectInvite/:id', rejectInvite)
+  .get('/leaveTeam/:id', leaveTeam)
+  .get('/deleteTeam/:id', deleteTeam)
+  ;
 module.exports = router;

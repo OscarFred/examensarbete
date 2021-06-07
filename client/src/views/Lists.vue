@@ -4,17 +4,15 @@
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="3" order="1" order-md="1">
-            <v-sheet rounded="lg" min-height="268"> </v-sheet>
+            <v-sheet rounded="lg" min-height="268">
+              <SidebarTeams :reload="reload" />
+            </v-sheet>
           </v-col>
-
           <v-col cols="12" md="6" order="3" order-md="2">
             <v-sheet min-height="70vh" rounded="lg">
               <TodoList :user="user" @reloadChild="updateReload" />
-
-              <!--  -->
             </v-sheet>
           </v-col>
-
           <v-col cols="12" md="3" order="2" order-md="3">
             <v-sheet rounded="lg" min-height="268">
               <SidebarFavorites :reload="reload" />
@@ -23,6 +21,7 @@
         </v-row>
       </v-container>
     </v-main>
+    
   </div>
 </template>
 
@@ -31,12 +30,14 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TodoList from "@/components/TodoList.vue";
 import SidebarFavorites from "@/components/SidebarFavorites.vue";
+import SidebarTeams from '../components/SidebarTeams.vue';
 
 export default {
   name: "Lists",
   components: {
     TodoList,
-    SidebarFavorites
+    SidebarFavorites,
+    SidebarTeams
   },
   props: {
     user: {}
@@ -48,6 +49,7 @@ export default {
   },
   methods: {
     updateReload: function() {
+      this.$emit("reloadChild", this.reload);
       this.reload += 1;
     }
   }

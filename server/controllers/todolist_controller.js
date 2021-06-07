@@ -70,9 +70,43 @@ const updateTodoItem = (req, res) => {
   });
 }
 
+const deleteTodoItem = (req, res) => {
+  TodoList.findOneAndUpdate({_id: ObjectID(req.body.listId)}, {$pull: {todoItems: {_id: ObjectID(req.params.id)}}})
+  .then((data) => {
+    console.log('Todoitem deleted!');
+    res.status(201).json(data);
+  })
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      console.error('Error Validating!', err);
+      res.status(422).json(err);
+    } else {
+      console.error(err);
+      res.status(500).json(err);
+    }
+  });
+}
+
+const deleteTodoList = (req, res) => {
+  TodoList.deleteOne({_id: new ObjectID(req.params.id)})
+  .then((data) => {
+    console.log('Todolist deleted!');
+    res.status(201).json(data);
+  })
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      console.error('Error Validating!', err);
+      res.status(422).json(err);
+    } else {
+      console.error(err);
+      res.status(500).json(err);
+    }
+  });
+}
+
 const readTodoList = (req, res) => {
   if (req.params.id !== "0") {
-    TodoList.find({ownerId: req.user._id, _id: ObjectID(req.params.id)}).sort({favorited: -1, createdAt: -1})
+    TodoList.find({ownerId: req.params.ownerId, _id: ObjectID(req.params.id)}).sort({favorited: -1, createdAt: -1})
     .then((data) => {
       res.status(200).json(data);
     })
@@ -81,7 +115,7 @@ const readTodoList = (req, res) => {
       res.status(500).json(err);
     });  
   } else {
-    TodoList.find({ownerId: req.user._id}).sort({favorited: -1, createdAt: -1})
+    TodoList.find({ownerId: req.params.ownerId}).sort({favorited: -1, createdAt: -1})
     .then((data) => {
       res.status(200).json(data);
     })
@@ -90,11 +124,10 @@ const readTodoList = (req, res) => {
       res.status(500).json(err);
     });
   }
-  
 };
 
 const readFavorites = (req, res) => {
-  TodoList.find({ownerId: req.user._id, favorited: true}).sort({favorited: -1, createdAt: -1})
+  TodoList.find({ownerId: req.params.ownerId, favorited: true}).sort({favorited: -1, createdAt: -1})
     .then((data) => {
       res.status(200).json(data);
     })
@@ -106,9 +139,11 @@ const readFavorites = (req, res) => {
 
 module.exports = {
   createTodoList,
+  createTodoItem,
   updateTodoList,
+  updateTodoItem,
   readFavorites,
   readTodoList,
-  createTodoItem,
-  updateTodoItem,
+  deleteTodoList,
+  deleteTodoItem
 };

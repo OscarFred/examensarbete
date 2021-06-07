@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import Lists from "./views/Lists.vue";
 import Landing from "./views/Landing.vue";
+import Team from "./views/Team.vue";
 
 Vue.use(Router);
 
@@ -11,13 +12,13 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "Landing",
+      name: "landing",
       component: Landing
     },
     {
-      path: "/home",
-      name: "home",
-      component: Home
+      path: "/lists",
+      name: "lists",
+      component: Lists
     },
     {
       path: "/about",
@@ -25,9 +26,19 @@ export default new Router({
       component: () => import("./views/About.vue")
     },
     {
-      path: "/Lista/:id",
-      name: "lista",
-      component: () => import("./views/SingularList.vue")
+      path: "/List/:id",
+      name: "list",
+      component: () => import("./views/Lists.vue")
+    },
+    {
+      path: "/teams",
+      name: "teamsView",
+      component: () => import("./views/TeamsView.vue")
+    },
+    {
+      path: "/team/:ownerId",
+      name: "team",
+      component: Team
     }
   ]
 });

@@ -4,14 +4,16 @@
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="3" order="1" order-md="1">
-            <v-sheet rounded="lg" min-height="268"> </v-sheet>
+            <v-sheet rounded="lg" min-height="268">
+              <!-- <SidebarInvites :reload="reload" /> -->
+            </v-sheet>
           </v-col>
 
           <v-col cols="12" md="6" order="3" order-md="2">
-            <v-sheet min-height="70vh" rounded="lg">
-              <TodoList :user="user" @reloadChild="updateReload" />
-
-              <!--  -->
+            <v-sheet min-height="25vh" rounded="lg">
+              <v-container>
+                <TodoList :user="user" />
+              </v-container>
             </v-sheet>
           </v-col>
 
@@ -28,15 +30,17 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
+
+// import SidebarInvites from "@/components/SidebarInvites.vue";
 import TodoList from "@/components/TodoList.vue";
-import SidebarTeams from "@/components/SidebarTeams.vue";
+import SidebarFavorites from "../components/SidebarFavorites.vue";
 
 export default {
   name: "Lists",
   components: {
+    // SidebarInvites,
     TodoList,
-    SidebarTeams
+    SidebarFavorites
   },
   props: {
     user: {}
@@ -44,12 +48,14 @@ export default {
   data: () => {
     return {
       reload: null
+
+      // invites: []
     };
   },
   methods: {
-    updateReload: function() {
-      this.reload += 1;
-    }
+    // updateReload: function() {
+    //   this.reload += 1;
+    // }
   }
 };
 </script>
