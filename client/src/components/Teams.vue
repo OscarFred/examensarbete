@@ -63,16 +63,19 @@
               </template>
 
               <v-card>
-                <v-list>
+                <v-list v-if="false">
                   <v-list-item>
                     <v-list-item-content>
-                      <v-text-field label="Search for user" v-model="searchText">
+                      <v-text-field
+                        label="Search for user"
+                        v-model="searchText"
+                      >
                         <v-icon slot="append">mdi-magnify</v-icon>
                       </v-text-field>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
-                <v-divider></v-divider>
+                <!-- <v-divider></v-divider> -->
 
                 <v-list>
                   <v-list-item
@@ -220,15 +223,15 @@ export default {
     };
   },
   props: {
-    user: {},
+    user: {}
   },
   created() {
     this.getTeams();
     this.getUsers();
   },
-	watch: {
+  watch: {
     searchText: function() {
-      this.getUsers()
+      this.getUsers();
     }
   },
   methods: {

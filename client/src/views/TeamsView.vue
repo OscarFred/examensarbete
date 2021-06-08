@@ -12,7 +12,7 @@
           <v-col cols="12" md="6" order="3" order-md="2">
             <v-sheet min-height="25vh" rounded="lg">
               <v-container>
-                <Teams :user="user"/>
+                <Teams :user="user" />
               </v-container>
             </v-sheet>
           </v-col>
@@ -31,7 +31,6 @@
 <script>
 // @ is an alias to /src
 
-
 import SidebarInvites from "@/components/SidebarInvites.vue";
 import Teams from "@/components/Teams.vue";
 
@@ -46,19 +45,15 @@ export default {
   },
   data: () => {
     return {
-      reload: null,
-      
+      reload: null
+
       // invites: []
     };
   },
   methods: {
-    
-    
-
     // updateReload: function() {
     //   this.reload += 1;
     // }
-  },
-  
+  }
 };
 </script>
