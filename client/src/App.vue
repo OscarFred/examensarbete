@@ -30,7 +30,10 @@
           <img :src="user.picture" />
         </v-avatar>
       </v-app-bar>
-      <router-view :user="user" v-if="user"></router-view>
+      <router-view
+        :user="user"
+        v-if="$route.name === 'landing' || user"
+      ></router-view>
     </v-app>
   </v-theme-provider>
 </template>
@@ -66,7 +69,7 @@ export default {
           withCredentials: true
         })
         .then(response => {
-          this.$store.commit("saveUser", response.data.user)
+          this.$store.commit("saveUser", response.data.user);
           this.user = response.data.user;
         });
     }

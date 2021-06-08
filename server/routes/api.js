@@ -14,7 +14,9 @@ const {
   acceptInvite,
   rejectInvite,
   leaveTeam,
-  deleteTeam
+  deleteTeam,
+  updateTeam,
+  removeFromTeam
 } = require('../controllers/team_controller');
 
 const {
@@ -44,12 +46,14 @@ router
   .post('/deleteTodoItem/:id', deleteTodoItem)
   .post('/createTeam/', createTeam)
   .get('/readTeams/', readTeams)
-  .get('/readUsers', readUsers)
+  .get('/readUsers/', readUsers)
   .post('/inviteToTeam/:id', inviteToTeam)
   .get('/readInvites/', readInvites)
   .get('/acceptInvite/:id', acceptInvite)
   .get('/rejectInvite/:id', rejectInvite)
   .get('/leaveTeam/:id', leaveTeam)
   .get('/deleteTeam/:id', deleteTeam)
+  .post('/updateTeam/:id', updateTeam)
+  .get('/removeFromTeam/:teamId/:userId', removeFromTeam)
   ;
 module.exports = router;

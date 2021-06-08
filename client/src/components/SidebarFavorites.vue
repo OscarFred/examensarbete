@@ -42,7 +42,7 @@ export default {
       if (this.$route.params.ownerId) {
         this.ownerId = this.$route.params.ownerId;
       } else {
-        this.ownerId = this.$store.state.user._id
+        this.ownerId = this.$store.state.user._id;
       }
       axios
         .get(`http://localhost:9000/api/readFavorites/${this.ownerId}`, {

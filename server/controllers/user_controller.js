@@ -4,8 +4,10 @@ const User = require('../models/user_schema');
 
 
 const readUsers = (req, res) => {
+
   User.find()
   .then((data) => {
+    console.log(data)
     let userReference = []
     data.forEach(user => {
       userReference.push({_id: user._id, displayName: user.displayName, picture: user.picture, selected: false})

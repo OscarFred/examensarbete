@@ -66,7 +66,7 @@
                 <v-list>
                   <v-list-item>
                     <v-list-item-content>
-                      <v-text-field label="Search for user">
+                      <v-text-field label="Search for user" v-model="searchText">
                         <v-icon slot="append">mdi-magnify</v-icon>
                       </v-text-field>
                     </v-list-item-content>
@@ -154,6 +154,7 @@
                 v-else-if="team.edit && team.ownerId !== member._id"
                 color="error"
                 close
+                @click:close="removeFromTeam(team, member._id)"
                 close-icon="mdi-account-minus"
                 outlined
                 >{{ member.displayName }}</v-chip
@@ -173,17 +174,16 @@
             >
             </span> -->
           </v-card-text>
-          <v-card-text v-if="team.teamDescription && team.edit === false">
+          <v-card-text v-if="team.teamDescription && !team.edit">
             {{ team.teamDescription }}
           </v-card-text>
           <v-card-text>
             <v-textarea
               v-if="team.edit"
-              v-model="team.description"
+              v-model="team.teamDescription"
               :elevation="2"
               rows="3"
-              transition="slide-x-transition"
-              label="Description"
+              label="Edit team description"
             ></v-textarea>
           </v-card-text>
           <!-- <v-card-actions>
@@ -215,15 +215,21 @@ export default {
       inviteUserMenu: false,
       dialog: false,
       itemName: "",
-      itemId: ""
+      itemId: "",
+      searchText: ""
     };
   },
   props: {
-    user: {}
+    user: {},
   },
   created() {
     this.getTeams();
     this.getUsers();
+  },
+	watch: {
+    searchText: function() {
+      this.getUsers()
+    }
   },
   methods: {
     openDialog: function(teamId, teamName) {
@@ -337,10 +343,10 @@ export default {
         this.$set(this.teams[index], "edit", true);
       }
     },
-		updateTeam: function(team) {
-			console.log(team)
-			delete team.edit
-			fetch(`http://localhost:9000/api/updateTeam/${team._id}`, {
+    updateTeam: function(team) {
+      console.log(team);
+      delete team.edit;
+      fetch(`http://localhost:9000/api/updateTeam/${team._id}`, {
         credentials: "include",
         body: JSON.stringify({
           teamName: team.teamName,
@@ -350,8 +356,23 @@ export default {
           "Content-Type": "application/json"
         },
         method: "POST"
+      }).then(() => {
+        this.getTeams();
       });
-		}
+    },
+    removeFromTeam: function(team, userId) {
+      delete team.edit;
+      axios
+        .get(`http://localhost:9000/api/removeFromTeam/${team._id}/${userId}`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true
+        })
+        .then(() => {
+          this.getTeams();
+        });
+    }
   }
 };
 </script>

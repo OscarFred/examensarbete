@@ -106,6 +106,34 @@ const leaveTeam = (req, res) => {
   })
 }
 
+const removeFromTeam = (req, res) => {
+  Team.updateOne({_id: ObjectID(req.params.teamId), ownerId: req.user._id }, {$pull: {members: {_id: ObjectID(req.params.userId)}}}, { safe: true, upsert: true })
+  .then((data => {
+    res.status(200).json(data);
+  }))
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  })
+}
+
+const updateTeam = (req, res) => {
+  Team.updateOne({"_id": ObjectID(req.params.id)}, {$set: {"teamName": req.body.teamName, "teamDescription": req.body.teamDescription}})
+  .then((data) => {
+    console.log('Team updated!');
+    res.status(201).json(data);
+  })
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      console.error('Error Validating!', err);
+      res.status(422).json(err);
+    } else {
+      console.error(err);
+      res.status(500).json(err);
+    }
+  });
+}
+
 const deleteTeam = (req, res) => {
   Team.deleteOne({_id: ObjectID(req.params.id), ownerId: ObjectID(req.user._id)})
   .then((data => {
@@ -124,5 +152,7 @@ module.exports = {
   acceptInvite,
   rejectInvite,
   leaveTeam,
-  deleteTeam
+  deleteTeam,
+  removeFromTeam,
+  updateTeam
 };
