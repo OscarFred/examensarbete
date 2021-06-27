@@ -294,7 +294,6 @@ export default {
     inviteToTeam: function(teamId) {
       let inviteUsers = this.inviteUsers.filter(x => x.selected === true);
       inviteUsers.map(x => delete x.selected);
-      console.log(inviteUsers);
       fetch(`http://localhost:9000/api/inviteToTeam/${teamId}`, {
         credentials: "include",
         body: JSON.stringify({
@@ -347,7 +346,6 @@ export default {
       }
     },
     updateTeam: function(team) {
-      console.log(team);
       delete team.edit;
       fetch(`http://localhost:9000/api/updateTeam/${team._id}`, {
         credentials: "include",

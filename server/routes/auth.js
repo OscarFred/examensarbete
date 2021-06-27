@@ -24,7 +24,7 @@ router
   })
   .get('/logout', function(req, res, next) {
     req.logout();
-    res.redirect('http://localhost:3002');
+    res.redirect('https://checkbxfrontend.herokuapp.com/');
 
     res.json({ msg: "Logged out" });
   })
@@ -33,6 +33,6 @@ router
       failureRedirect: '/failed'
   }),
   function (req, res) {
-      res.redirect('http://localhost:3002');
+      res.redirect('https://checkbxfrontend.herokuapp.com/');
   });
 module.exports = router;

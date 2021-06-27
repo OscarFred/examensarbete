@@ -57,14 +57,14 @@ export default {
       this.reload += 1;
     },
     logIn: function() {
-      window.location.href = "http://localhost:9000/auth/google";
+      window.location.href = "https://checkbx.herokuapp.com/auth/google";
     },
     logOut: function() {
-      window.location.href = "http://localhost:9000/auth/logout";
+      window.location.href = "https://checkbx.herokuapp.com/auth/logout";
     },
     checkIfLoggedIn() {
       axios
-        .get("http://localhost:9000/auth/check", {
+        .get("https://checkbx.herokuapp.com/auth/check", {
           headers: { "Content-Type": "application/json" },
           withCredentials: true
         })

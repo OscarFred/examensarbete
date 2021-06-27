@@ -35,8 +35,7 @@ import axios from "axios";
 export default {
   data: () => {
     return {
-      invites: [],
-			
+      invites: []
     };
   },
   methods: {
@@ -49,7 +48,6 @@ export default {
           withCredentials: true
         })
         .then(result => {
-          console.log(result.data);
           this.invites = result.data;
         });
     },

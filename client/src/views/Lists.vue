@@ -21,7 +21,6 @@
         </v-row>
       </v-container>
     </v-main>
-    
   </div>
 </template>
 
@@ -30,7 +29,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TodoList from "@/components/TodoList.vue";
 import SidebarFavorites from "@/components/SidebarFavorites.vue";
-import SidebarTeams from '../components/SidebarTeams.vue';
+import SidebarTeams from "../components/SidebarTeams.vue";
 
 export default {
   name: "Lists",

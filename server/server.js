@@ -1,7 +1,8 @@
 // Importing required modules
 const cors = require('cors');
 const express = require('express');
-const { reset } = require('nodemon');
+// const { reset } = require('nodemon');
+const path = require('path')
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 require('./passport-setup');
@@ -21,7 +22,8 @@ const app = express();
 var corsOption = {
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
+    credentials: true,
+    
    };
 app.use(cors(corsOption));
 
@@ -32,10 +34,12 @@ app.use(cookieSession({
 }))
 
 
+app.set('trust proxy', 1)
+
 app.set('view engine', 'html');
 
 // Static folder
-app.use(express.static(__dirname + '/views/'));
+app.use(express.static(path.join(__dirname + '/views/')));
 // google ouath
 const isLoggedIn = (req, res, next) => {
     if (req.user) {
