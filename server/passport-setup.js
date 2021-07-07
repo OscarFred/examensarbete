@@ -18,7 +18,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
     clientID: "926562963050-voi9des2np17g8pi66bdvsd4rmj069nt.apps.googleusercontent.com",
     clientSecret: "daHVph46UnFTPoLOzYiJqBww",
-    callbackURL: "http://checkbx.herokuapp.com/auth/google/callback"
+    callbackURL: "http://178.62.78.147/auth/google/callback"
   },
   (accessToken, refreshToken, profile, done) => {
     // Callback method triggered upon signing in.
