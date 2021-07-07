@@ -57,14 +57,14 @@ export default {
       this.reload += 1;
     },
     logIn: function() {
-      window.location.href = "https://http://178.62.78.147:9000/auth/google";
+      window.location.href = "http://178.62.78.147:9000/auth/google";
     },
     logOut: function() {
-      window.location.href = "https://http://178.62.78.147:9000/auth/logout";
+      window.location.href = "http://178.62.78.147:9000/auth/logout";
     },
     checkIfLoggedIn() {
       axios
-        .get("https://http://178.62.78.147:9000/auth/check", {
+        .get("http://178.62.78.147:9000/auth/check", {
           headers: { "Content-Type": "application/json" },
           withCredentials: true
         })
