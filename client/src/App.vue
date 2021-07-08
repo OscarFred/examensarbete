@@ -57,14 +57,14 @@ export default {
       this.reload += 1;
     },
     logIn: function() {
-      window.location.href = "https://api.tjeckbox.com:9000/auth/google";
+      window.location.href = "https://api.tjeckbox.com:8080/auth/google";
     },
     logOut: function() {
-      window.location.href = "https://api.tjeckbox.com:9000/auth/logout";
+      window.location.href = "https://api.tjeckbox.com:8080/auth/logout";
     },
     checkIfLoggedIn() {
       axios
-        .get("https://api.tjeckbox.com:9000/auth/check", {
+        .get("https://api.tjeckbox.com:8080/auth/check", {
           headers: { "Content-Type": "application/json" },
           withCredentials: true
         })

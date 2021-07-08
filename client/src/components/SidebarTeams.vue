@@ -41,7 +41,7 @@ export default {
   methods: {
     getTeams: function() {
       axios
-        .get("http://localhost:9000/api/readTeams", {
+        .get("http://localhost:8080/api/readTeams", {
           headers: {
             "Content-Type": "application/json"
           },
