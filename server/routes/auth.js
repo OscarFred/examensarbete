@@ -24,7 +24,7 @@ router
   })
   .get('/logout', function(req, res, next) {
     req.logout();
-    res.redirect('https://tjeckbox-8wylo.ondigitalocean.app/');
+    res.redirect('https://tjeckbox.com/');
 
     res.json({ msg: "Logged out" });
   })
@@ -33,6 +33,6 @@ router
       failureRedirect: '/failed'
   }),
   function (req, res) {
-      res.redirect('https://tjeckbox-8wylo.ondigitalocean.app/');
+      res.redirect('https://tjeckbox.com/');
   });
 module.exports = router;

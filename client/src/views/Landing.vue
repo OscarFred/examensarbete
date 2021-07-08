@@ -62,7 +62,7 @@ export default {
   created() {},
   methods: {
     logIn: function() {
-      window.location.href = "http://178.62.78.147:9000/auth/google";
+      window.location.href = "http://api.tjeckbox.com/auth/google";
     }
   }
 };
