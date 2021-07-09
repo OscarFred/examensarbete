@@ -45,7 +45,7 @@ export default {
         this.ownerId = this.$store.state.user._id;
       }
       axios
-        .get(`http://localhost:8080/api/readFavorites/${this.ownerId}`, {
+        .get(`https://api.tjeckbox.com/api/readFavorites/${this.ownerId}`, {
           headers: {
             "Content-Type": "application/json"
           },

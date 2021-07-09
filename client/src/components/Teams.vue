@@ -245,7 +245,7 @@ export default {
     },
     getTeams: function() {
       axios
-        .get(`http://localhost:8080/api/readTeams/`, {
+        .get(`https://api.tjeckbox.com/api/readTeams/`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -257,7 +257,7 @@ export default {
     },
     getUsers: function() {
       axios
-        .get(`http://localhost:8080/api/readUsers/`, {
+        .get(`https://api.tjeckbox.com/api/readUsers/`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -268,7 +268,7 @@ export default {
         });
     },
     createTeam: async function() {
-      const response = await fetch("http://localhost:8080/api/createTeam/", {
+      const response = await fetch("https://api.tjeckbox.com/api/createTeam/", {
         credentials: "include",
         body: JSON.stringify({
           teamName: this.teamName,
@@ -294,7 +294,7 @@ export default {
     inviteToTeam: function(teamId) {
       let inviteUsers = this.inviteUsers.filter(x => x.selected === true);
       inviteUsers.map(x => delete x.selected);
-      fetch(`http://localhost:8080/api/inviteToTeam/${teamId}`, {
+      fetch(`https://api.tjeckbox.com/api/inviteToTeam/${teamId}`, {
         credentials: "include",
         body: JSON.stringify({
           ownerId: this.user._id,
@@ -308,7 +308,7 @@ export default {
     },
     leaveTeam: function(teamId) {
       axios
-        .get(`http://localhost:8080/api/leaveTeam/${teamId}`, {
+        .get(`https://api.tjeckbox.com/api/leaveTeam/${teamId}`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -320,7 +320,7 @@ export default {
     },
     deleteTeam: function(teamId) {
       axios
-        .get(`http://localhost:8080/api/deleteTeam/${teamId}`, {
+        .get(`https://api.tjeckbox.com/api/deleteTeam/${teamId}`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -347,7 +347,7 @@ export default {
     },
     updateTeam: function(team) {
       delete team.edit;
-      fetch(`http://localhost:8080/api/updateTeam/${team._id}`, {
+      fetch(`https://api.tjeckbox.com/api/updateTeam/${team._id}`, {
         credentials: "include",
         body: JSON.stringify({
           teamName: team.teamName,
@@ -364,12 +364,15 @@ export default {
     removeFromTeam: function(team, userId) {
       delete team.edit;
       axios
-        .get(`http://localhost:8080/api/removeFromTeam/${team._id}/${userId}`, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          withCredentials: true
-        })
+        .get(
+          `https://api.tjeckbox.com/api/removeFromTeam/${team._id}/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            withCredentials: true
+          }
+        )
         .then(() => {
           this.getTeams();
         });

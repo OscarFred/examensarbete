@@ -347,7 +347,7 @@ export default {
       }
       if (this.listTitle !== "") {
         const response = await fetch(
-          "http://localhost:9000/api/createTodoList/",
+          "https://api.tjeckbox.com/api/createTodoList/",
           {
             credentials: "include",
             body: JSON.stringify({
@@ -369,7 +369,7 @@ export default {
       }
     },
     updateTodoList: function(listId, title, favorited) {
-      fetch("http://localhost:9000/api/updateTodoList/" + listId, {
+      fetch("https://api.tjeckbox.com/api/updateTodoList/" + listId, {
         credentials: "include",
         body: JSON.stringify({
           title,
@@ -386,7 +386,7 @@ export default {
       });
     },
     addToList: function(listId) {
-      fetch("http://localhost:9000/api/createTodoItem/" + listId, {
+      fetch("https://api.tjeckbox.com/api/createTodoItem/" + listId, {
         credentials: "include",
         body: JSON.stringify({
           text: this.text[listId],
@@ -402,7 +402,7 @@ export default {
     },
     updateItem: function(listId, text, id, checked) {
       this.confettiEnabled = true;
-      fetch("http://localhost:9000/api/updateTodoItem/" + listId, {
+      fetch("https://api.tjeckbox.com/api/updateTodoItem/" + listId, {
         credentials: "include",
         body: JSON.stringify({
           id: id,
@@ -419,7 +419,7 @@ export default {
       });
     },
     deleteItem: function(listId) {
-      fetch("http://localhost:9000/api/deleteTodoList/" + listId, {
+      fetch("https://api.tjeckbox.com/api/deleteTodoList/" + listId, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json"
@@ -432,7 +432,7 @@ export default {
       });
     },
     deleteTodoItem: function(listId, todoItemId) {
-      fetch("http://localhost:9000/api/deleteTodoItem/" + todoItemId, {
+      fetch("https://api.tjeckbox.com/api/deleteTodoItem/" + todoItemId, {
         credentials: "include",
         body: JSON.stringify({
           listId: listId
