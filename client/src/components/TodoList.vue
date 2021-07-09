@@ -327,7 +327,7 @@ export default {
       }
       axios
         .get(
-          `http://localhost:9000/api/readTodoLists/${this.listId}/${this.ownerId}`,
+          `https://api.tjeckbox.com/api/readTodoLists/${this.listId}/${this.ownerId}`,
           {
             headers: {
               "Content-Type": "application/json"
