@@ -52,7 +52,6 @@ export default {
   },
   mounted() {
     // this.checkIfLoggedIn();
-    console.log(process.env.VUE_APP_API_URL);
   },
   methods: {
     updateReload: function() {
