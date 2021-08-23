@@ -62,7 +62,7 @@ export default {
   created() {},
   methods: {
     logIn: function() {
-      window.location.href = "http://api.tjeckbox.com/auth/google";
+      window.location.href = `${process.env.VUE_APP_API_URL}/auth/google`;
     }
   }
 };

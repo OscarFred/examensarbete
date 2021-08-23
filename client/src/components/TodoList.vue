@@ -327,7 +327,7 @@ export default {
       }
       axios
         .get(
-          `https://api.tjeckbox.com/api/readTodoLists/${this.listId}/${this.ownerId}`,
+          `${process.env.VUE_APP_API_URL}/api/readTodoLists/${this.listId}/${this.ownerId}`,
           {
             headers: {
               "Content-Type": "application/json"
@@ -337,6 +337,9 @@ export default {
         )
         .then(result => {
           this.todoLists = result.data;
+          this.todoLists.forEach(list => {
+            list.todoItems.reverse();
+          });
         });
     },
     createTodoList: async function() {
@@ -347,7 +350,7 @@ export default {
       }
       if (this.listTitle !== "") {
         const response = await fetch(
-          "https://api.tjeckbox.com/api/createTodoList/",
+          `${process.env.VUE_APP_API_URL}/api/createTodoList/`,
           {
             credentials: "include",
             body: JSON.stringify({
@@ -369,7 +372,7 @@ export default {
       }
     },
     updateTodoList: function(listId, title, favorited) {
-      fetch("https://api.tjeckbox.com/api/updateTodoList/" + listId, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/updateTodoList/` + listId, {
         credentials: "include",
         body: JSON.stringify({
           title,
@@ -386,7 +389,7 @@ export default {
       });
     },
     addToList: function(listId) {
-      fetch("https://api.tjeckbox.com/api/createTodoItem/" + listId, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/createTodoItem/` + listId, {
         credentials: "include",
         body: JSON.stringify({
           text: this.text[listId],
@@ -397,12 +400,13 @@ export default {
         },
         method: "POST"
       }).then(() => {
+        this.text[listId] = "";
         this.getLists();
       });
     },
     updateItem: function(listId, text, id, checked) {
       this.confettiEnabled = true;
-      fetch("https://api.tjeckbox.com/api/updateTodoItem/" + listId, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/updateTodoItem/` + listId, {
         credentials: "include",
         body: JSON.stringify({
           id: id,
@@ -419,7 +423,7 @@ export default {
       });
     },
     deleteItem: function(listId) {
-      fetch("https://api.tjeckbox.com/api/deleteTodoList/" + listId, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/deleteTodoList/` + listId, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json"
@@ -432,7 +436,7 @@ export default {
       });
     },
     deleteTodoItem: function(listId, todoItemId) {
-      fetch("https://api.tjeckbox.com/api/deleteTodoItem/" + todoItemId, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/deleteTodoItem/` + todoItemId, {
         credentials: "include",
         body: JSON.stringify({
           listId: listId

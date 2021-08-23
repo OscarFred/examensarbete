@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/user_schema');
-
+require('dotenv').config()
 
 
 passport.serializeUser((user, done) => {
@@ -18,13 +18,15 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
     clientID: "926562963050-voi9des2np17g8pi66bdvsd4rmj069nt.apps.googleusercontent.com",
     clientSecret: "daHVph46UnFTPoLOzYiJqBww",
-    callbackURL: "https://api.tjeckbox.com/auth/google/callback"
+    callbackURL: `${process.env.CALLBACK_URL}/auth/google/callback`
   },
   (accessToken, refreshToken, profile, done) => {
     // Callback method triggered upon signing in.
+    
     User.findOne({ googleId: profile.id }).then(currentUser => {
       if (currentUser) {
         // already have this user
+        console.log('hej')
         done(null, currentUser);
       } else {
         // if not, create user in our db
@@ -35,6 +37,7 @@ passport.use(new GoogleStrategy({
         })
           .save()
           .then(newUser => {
+            
             done(null, newUser);
           });
       }

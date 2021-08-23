@@ -245,7 +245,7 @@ export default {
     },
     getTeams: function() {
       axios
-        .get(`https://api.tjeckbox.com/api/readTeams/`, {
+        .get(`${process.env.VUE_APP_API_URL}/api/readTeams/`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -257,7 +257,7 @@ export default {
     },
     getUsers: function() {
       axios
-        .get(`https://api.tjeckbox.com/api/readUsers/`, {
+        .get(`${process.env.VUE_APP_API_URL}/api/readUsers/`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -268,33 +268,36 @@ export default {
         });
     },
     createTeam: async function() {
-      const response = await fetch("https://api.tjeckbox.com/api/createTeam/", {
-        credentials: "include",
-        body: JSON.stringify({
-          teamName: this.teamName,
-          teamDescription: this.description,
-          ownerId: this.user._id,
-          members: [
-            {
-              _id: this.user._id,
-              displayName: this.user.displayName,
-              picture: this.user.picture
-            }
-          ],
-          color: ""
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST"
-      });
+      const response = await fetch(
+        `${process.env.VUE_APP_API_URL}/api/createTeam/`,
+        {
+          credentials: "include",
+          body: JSON.stringify({
+            teamName: this.teamName,
+            teamDescription: this.description,
+            ownerId: this.user._id,
+            members: [
+              {
+                _id: this.user._id,
+                displayName: this.user.displayName,
+                picture: this.user.picture
+              }
+            ],
+            color: ""
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          },
+          method: "POST"
+        }
+      );
       await response.json();
       this.getTeams();
     },
     inviteToTeam: function(teamId) {
       let inviteUsers = this.inviteUsers.filter(x => x.selected === true);
       inviteUsers.map(x => delete x.selected);
-      fetch(`https://api.tjeckbox.com/api/inviteToTeam/${teamId}`, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/inviteToTeam/${teamId}`, {
         credentials: "include",
         body: JSON.stringify({
           ownerId: this.user._id,
@@ -308,7 +311,7 @@ export default {
     },
     leaveTeam: function(teamId) {
       axios
-        .get(`https://api.tjeckbox.com/api/leaveTeam/${teamId}`, {
+        .get(`${process.env.VUE_APP_API_URL}/api/leaveTeam/${teamId}`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -320,7 +323,7 @@ export default {
     },
     deleteTeam: function(teamId) {
       axios
-        .get(`https://api.tjeckbox.com/api/deleteTeam/${teamId}`, {
+        .get(`${process.env.VUE_APP_API_URL}/api/deleteTeam/${teamId}`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -347,7 +350,7 @@ export default {
     },
     updateTeam: function(team) {
       delete team.edit;
-      fetch(`https://api.tjeckbox.com/api/updateTeam/${team._id}`, {
+      fetch(`${process.env.VUE_APP_API_URL}/api/updateTeam/${team._id}`, {
         credentials: "include",
         body: JSON.stringify({
           teamName: team.teamName,
@@ -365,7 +368,7 @@ export default {
       delete team.edit;
       axios
         .get(
-          `https://api.tjeckbox.com/api/removeFromTeam/${team._id}/${userId}`,
+          `${process.env.VUE_APP_API_URL}/api/removeFromTeam/${team._id}/${userId}`,
           {
             headers: {
               "Content-Type": "application/json"

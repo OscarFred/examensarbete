@@ -41,7 +41,7 @@ export default {
   methods: {
     getInvites: function() {
       axios
-        .get(`https://api.tjeckbox.com/api/readInvites/`, {
+        .get(`${process.env.VUE_APP_API_URL}/api/readInvites/`, {
           headers: {
             "Content-Type": "application/json"
           },
@@ -52,13 +52,13 @@ export default {
         });
     },
     acceptInvite: async function(teamId) {
-      await fetch(`https://api.tjeckbox.com/api/acceptInvite/${teamId}`, {
+      await fetch(`${process.env.VUE_APP_API_URL}/api/acceptInvite/${teamId}`, {
         credentials: "include"
       });
       this.getInvites();
     },
     rejectInvite: async function(teamId) {
-      await fetch(`https://api.tjeckbox.com/api/rejectInvite/${teamId}`, {
+      await fetch(`${process.env.VUE_APP_API_URL}/api/rejectInvite/${teamId}`, {
         credentials: "include"
       });
       this.getInvites();

@@ -45,12 +45,15 @@ export default {
         this.ownerId = this.$store.state.user._id;
       }
       axios
-        .get(`https://api.tjeckbox.com/api/readFavorites/${this.ownerId}`, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          withCredentials: true
-        })
+        .get(
+          `${process.env.VUE_APP_API_URL}/api/readFavorites/${this.ownerId}`,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            withCredentials: true
+          }
+        )
         .then(result => {
           this.favorites = result.data;
         });

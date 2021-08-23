@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+require('dotenv').config()
 
 const {
 
@@ -14,6 +15,7 @@ router
     prompt : "select_account" // Added here
 }))
   .get("/check", (req, res) => {
+    console.log('check')
     if (req.user === undefined) {
       res.json({});
     } else {
@@ -23,8 +25,10 @@ router
     }
   })
   .get('/logout', function(req, res, next) {
+    console.log('logout')
+
     req.logout();
-    res.redirect('https://tjeckbox.com/');
+    res.redirect(`${process.env.REDIRECT_URL}`);
 
     res.json({ msg: "Logged out" });
   })
@@ -33,6 +37,7 @@ router
       failureRedirect: '/failed'
   }),
   function (req, res) {
-      res.redirect('https://tjeckbox.com/');
+      console.log(process.env.REDIRECT_URL)
+      res.redirect(`${process.env.REDIRECT_URL}`);
   });
 module.exports = router;

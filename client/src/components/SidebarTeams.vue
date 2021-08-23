@@ -41,7 +41,7 @@ export default {
   methods: {
     getTeams: function() {
       axios
-        .get("https://api.tjeckbox.com/api/readTeams", {
+        .get(`${process.env.VUE_APP_API_URL}/api/readTeams`, {
           headers: {
             "Content-Type": "application/json"
           },

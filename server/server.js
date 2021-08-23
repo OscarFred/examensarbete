@@ -59,6 +59,6 @@ app.use('/api', isLoggedIn, require('./routes/api'));
 
 // Listening to port
 app.listen(port);
-console.log(`Listening On http://localhost:${port}/api`);
+console.log(`Listening On ${process.env.CALLBACK_URL} http://localhost:${port}/api`);
 
 module.exports = app;

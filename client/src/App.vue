@@ -40,6 +40,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data: () => ({
     user: undefined,
@@ -51,20 +52,21 @@ export default {
   },
   mounted() {
     // this.checkIfLoggedIn();
+    console.log(process.env.VUE_APP_API_URL);
   },
   methods: {
     updateReload: function() {
       this.reload += 1;
     },
     logIn: function() {
-      window.location.href = "https://api.tjeckbox.com/auth/google";
+      window.location.href = `${process.env.VUE_APP_API_URL}/auth/google`;
     },
     logOut: function() {
-      window.location.href = "https://api.tjeckbox.com/auth/logout";
+      window.location.href = `${process.env.VUE_APP_API_URL}/auth/logout`;
     },
     checkIfLoggedIn() {
       axios
-        .get("https://api.tjeckbox.com/auth/check", {
+        .get(`${process.env.VUE_APP_API_URL}/auth/check`, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true
         })
